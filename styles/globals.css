@@ -42,10 +42,15 @@ p {
   margin: 0;
 }
 
+h1 {
+  font-size: 4rem;
+  margin-bottom: 2rem;
+}
+
 .container {
   display: flex;
   flex-direction: column;
   justify-content: center;
-  padding: 0 5.2rem;
+  padding: 5.2rem;
   min-height: 100vh;
 }

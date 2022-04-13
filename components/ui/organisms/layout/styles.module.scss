@@ -1,0 +1,102 @@
+@mixin animate($animation,$duration,$method,$times){
+  animation: $animation $duration $method $times;
+}
+
+@mixin keyframes($name){
+  @keyframes #{$name}{
+      @content;
+  }
+}
+
+.transitioning { 
+  @include keyframes(transitioning){
+    from {
+      transform: translateX(0);
+    }
+  
+    to {
+      transform: translateX(100%);
+    }
+   }
+ @include animate(transitioning, 500ms, linear, 1);
+ transform: translateX(100%);
+}
+
+.container {
+  width: 100%;
+  height: 100vh;
+  background-color: white;
+  display: grid;
+  grid-template-columns: 13rem 1fr;
+}
+
+.nav-container {
+  position: relative;
+  z-index: 100;
+}
+
+.content {
+  overflow-y: auto;
+  overflow-x: hidden;
+  position: relative;
+  &::-webkit-scrollbar {
+    width: 12px;   
+  }
+  
+  &::-webkit-scrollbar-track {
+    background: darkgrey;        /* color of the tracking area */
+  }
+  
+  &::-webkit-scrollbar-thumb {
+    background: rgb(0,194,255);
+    border: 3px solid darkgrey;
+background: radial-gradient(circle, rgba(0,194,255,1) 0%, rgba(25,136,171,1) 100%);   /* color of the scroll thumb */
+  }
+}
+
+.page-transition-container {
+  position: fixed;
+  top: 0;
+  left: -100%;
+  height: 100%;
+  width: 100%;
+  background-color: black;
+  z-index: 99;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transform: translateX(100%);
+
+  &.loaded {
+    @include keyframes(loaded){
+      0% {
+        transform: translateX(100%);
+      }
+      
+      50% {
+        opacity: 1;
+      }
+
+      100% {
+        opacity: 0.2;
+        transform: translateX(200%);
+      }
+     }
+   @include animate(loaded, 400ms, linear, 1);
+   transform: translateX(0);
+    }
+
+    &.transitioning { 
+      @include keyframes(transitioning){
+        from {
+          transform: translateX(0);
+        }
+      
+        to {
+          transform: translateX(100%);
+        }
+       }
+     @include animate(transitioning, 400ms, linear, 1);
+     transform: translateX(100%);
+    }
+}
