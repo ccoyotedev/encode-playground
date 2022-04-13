@@ -7,7 +7,7 @@ const installationIdToName = (id: number) => {
   return `Item Id: ${id}`;
 };
 
-const getRandomId = (): string => {
+export const getRandomId = (): string => {
   const randLetter = String.fromCharCode(65 + Math.floor(Math.random() * 26));
   return randLetter + Date.now();
 };
@@ -64,7 +64,6 @@ export const handleCompletedCraft = (
 
   grouped.forEach((group) => {
     showNotificationWithTimeout(dispatch, {
-      type: "success",
       title: "Completed crafting",
       message: `${installationIdToName(group[0])}${
         group.length > 1 ? ` (x${group.length})` : ""

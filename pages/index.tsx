@@ -10,7 +10,8 @@ const Home: NextPage = () => {
       }}
     >
       <div className="container">
-        <h1>Welcome to my Encode Homework.</h1>
+        <h1>Encode Solidity Bootcamp Homework</h1>
+        <h3>- By Caleb Brown</h3>
       </div>
     </Layout>
   );

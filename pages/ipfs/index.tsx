@@ -1,7 +1,10 @@
 import { Layout } from "components";
+import { useNotification } from "contexts/NotificationContext";
+import { getRandomId } from "contexts/NotificationContext/actions";
 import { useState } from "react";
 
 const IPFSPage = () => {
+  const [, dispatch] = useNotification();
   const [postData, setPostData] = useState("");
   const [cidPath, setCidPath] = useState();
 
@@ -18,6 +21,14 @@ const IPFSPage = () => {
     });
     const json = await res.json();
     setCidPath(json.cidPath);
+    dispatch({
+      type: "SHOW_NOTIFICATION",
+      notification: {
+        id: getRandomId(),
+        title: "IPFS Post",
+        message: `${json.cidPath}`,
+      },
+    });
   };
 
   const fetchDataFromIPFS = async (path: string) => {
