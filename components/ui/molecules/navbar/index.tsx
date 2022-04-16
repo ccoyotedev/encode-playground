@@ -14,7 +14,7 @@ export const Navbar = ({ navOptions }: Props) => {
     <div className={styles["container"]}>
       <Link href="/" passHref>
         <a>
-          <div className={styles["logo-container"]}></div>
+          <div className={styles["logo-container"]}>Encode</div>
         </a>
       </Link>
       <nav className={styles["nav-container"]}>

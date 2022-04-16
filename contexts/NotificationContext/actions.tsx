@@ -65,9 +65,10 @@ export const handleCompletedCraft = (
   grouped.forEach((group) => {
     showNotificationWithTimeout(dispatch, {
       title: "Completed crafting",
-      message: `${installationIdToName(group[0])}${
+      body: `${installationIdToName(group[0])}${
         group.length > 1 ? ` (x${group.length})` : ""
       }`,
+      time: new Date(),
     });
   });
 

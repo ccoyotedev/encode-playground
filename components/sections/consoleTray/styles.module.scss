@@ -1,11 +1,23 @@
+.console-tray {
+  .scrollable {
+    height: calc(100vh - 52px);
+  }
+}
+
 .notification-card {
   border: 1px solid rgba(0,0,0,0.2);
   padding: 0.8rem;
   margin-bottom: 0.8rem;
-  word-wrap:break-word;
-  cursor: copy;
+  word-wrap: break-word;
 
+  &.clipboard {
+    cursor: copy;
+  }
   &:hover {
     border: 1px solid rgba(0,0,0,1);
+  }
+
+  .time {
+    text-align: right;
   }
 }

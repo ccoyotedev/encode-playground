@@ -64,6 +64,7 @@ h4 {
 
 p {
   font-size: 1.4rem;
+  margin-bottom: 0.7rem;
 }
 
 .container {
@@ -72,4 +73,25 @@ p {
   justify-content: center;
   padding: 5.2rem;
   min-height: 100vh;
+}
+
+.scrollable {
+  overflow-y: scroll;
+  overflow-x: hidden;
+  position: relative;
+  padding-right: 8px;
+
+  &::-webkit-scrollbar {
+    width: 8px;
+    margin-left: 4px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: white;
+    border: 1px solid rgba(0,0,0,0.2); /* color of the tracking area */
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: black;
+  }
 }

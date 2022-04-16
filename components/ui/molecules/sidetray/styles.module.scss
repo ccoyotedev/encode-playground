@@ -3,7 +3,7 @@
   top: 0;
   right: 0;
   height: 100%;
-  transform: translateX(100%);
+  transform: translateX(80%);
   transition: transform 200ms ease;
 
   &.open {
@@ -35,4 +35,5 @@
   padding: 1.2rem;
   height: 100%;
   width: 24rem;
+  background-color: white;
 }

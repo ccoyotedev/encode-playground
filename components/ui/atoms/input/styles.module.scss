@@ -1,0 +1,48 @@
+.input-wrapper {
+  display: flex;
+  flex-direction: column;
+  margin-top: 1.2rem;
+
+  label {
+    font-size: 1.6rem;
+    margin-bottom: 0.4rem;
+  }
+
+  &.full-width {
+    width: 100%;
+
+    .input-container {
+      width: 100%;
+      display: flex;
+      justify-content: space-between;
+
+      input {
+        width: 100%;
+      }
+    }
+  }
+}
+
+.input-container {
+  border-radius: 0;
+  padding: 0.4rem;
+  border: 1px solid rgba(0,0,0,0.2);
+  width: fit-content;
+
+  &:hover {
+    border: 1px solid rgba(0,0,0,1);
+  }
+
+  &:focus {
+    border: 1px solid #00C2FF;
+  }
+
+  input {
+    border: none;
+
+    &:focus {
+      border: none;
+      outline: none;
+    }
+  }
+}

@@ -1,44 +1,7 @@
 import { Layout } from "components";
-import { useNotification } from "contexts/NotificationContext";
-import { getRandomId } from "contexts/NotificationContext/actions";
-import { useState } from "react";
+import { IPFSPost, IPFSGet } from "components/sections";
 
 const IPFSPage = () => {
-  const [, dispatch] = useNotification();
-  const [postData, setPostData] = useState("");
-  const [cidPath, setCidPath] = useState();
-
-  const [fetchPath, setFetchPath] = useState("");
-  const [returnedData, setReturnedData] = useState();
-
-  const handlePostToIPFS = async (value: string) => {
-    const res = await fetch("/api/ipfs", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ message: value }),
-    });
-    const json = await res.json();
-    setCidPath(json.cidPath);
-    dispatch({
-      type: "SHOW_NOTIFICATION",
-      notification: {
-        id: getRandomId(),
-        title: "IPFS Post",
-        message: `${json.cidPath}`,
-      },
-    });
-  };
-
-  const fetchDataFromIPFS = async (path: string) => {
-    const res = await fetch(`/api/ipfs/${path}`, {
-      method: "GET",
-    });
-    const json = await res.json();
-    setReturnedData(json.data);
-  };
-
   return (
     <Layout
       metadetails={{
@@ -47,44 +10,35 @@ const IPFSPage = () => {
       }}
     >
       <div className="container">
-        <div>
-          <h1>IPFS</h1>
-          <div>
-            <input
-              value={postData}
-              onChange={(e) => setPostData(e.target.value)}
-            />
-            <button
-              disabled={!postData}
-              onClick={() => handlePostToIPFS(postData)}
-            >
-              Post data
-            </button>
-            {cidPath && (
-              <div>
-                <h2>Cid Path</h2>
-                <p>{cidPath}</p>
-              </div>
-            )}
-          </div>
-          <div>
-            <input
-              value={fetchPath}
-              onChange={(e) => setFetchPath(e.target.value)}
-            />
-            <button
-              disabled={!fetchPath}
-              onClick={() => fetchDataFromIPFS(fetchPath)}
-            >
-              Fetch
-            </button>
-            {returnedData && (
-              <div>
-                <h2>Returned data</h2>
-                <p>{returnedData}</p>
-              </div>
-            )}
-          </div>
+        <div style={{ maxWidth: "700px" }}>
+          <h3>Homework 7</h3>
+
+          <h1>Decentralised Storage</h1>
+
+          <p style={{ color: `rgba(0,0,0,0.6)` }}>
+            Decentralised storage providers allow participants to store data
+            online without fear of location-based restrictions.
+          </p>
+          <p style={{ color: `rgba(0,0,0,0.6)` }}>
+            Data stored in this manner is uniquely identified based on the
+            contents to avoid clashing. This also acts as a retrieval mechanism
+            to ensure you're getting the promised information.
+          </p>
+          <p style={{ color: `rgba(0,0,0,0.6)` }}>
+            Data stored in free decentralised storage should be treated as
+            volatile as it may not be stored for extended periods of time,
+            especially if it's not being accessed.
+          </p>
+          <p style={{ color: `rgba(0,0,0,0.6)` }}>
+            Immutable storage is available from third-party providers or by
+            'pinning' data
+          </p>
+        </div>
+        <div style={{ maxWidth: "500px", marginTop: "24px" }}>
+          <h2>IPFS</h2>
+
+          <IPFSPost />
+          <IPFSGet />
         </div>
       </div>
     </Layout>
