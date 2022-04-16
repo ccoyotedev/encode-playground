@@ -31,13 +31,14 @@
     display: block;
     cursor: pointer;
     transition: 300ms;
+    color: rgba(0,0,0,0.2);
   }
 
   &:active,
   &:hover,
   &.active {
     a {
-      color: #00C2FF;
+      color: rgba(0,0,0,1);
     }
   }
 }

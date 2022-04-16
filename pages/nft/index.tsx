@@ -8,8 +8,9 @@ const NFTPage = () => {
         description: "Page for testing minting + Viewing NFTs",
       }}
     >
-      <div>
-        <h1>NFT</h1>
+      <div className="container">
+        <h3>Homework 8</h3>
+        <h1>Interacting with NFTs</h1>
       </div>
     </Layout>
   );
