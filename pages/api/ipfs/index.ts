@@ -18,7 +18,7 @@ export const getIPFSNode = async () => {
 
 const handler = async (req: NextApiRequest, res: NextApiResponse<ResData>) => {
   if (req.method === "POST") {
-    const node = await create();
+    const node = await getIPFSNode();
 
     const message = req.body.message;
 

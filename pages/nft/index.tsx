@@ -14,11 +14,8 @@ const NFTPage = () => {
   const [ownerPriv, setOwnerPriv] = useState<string>();
   const [contract, setContract] = useState<ethers.Contract>();
 
+  const [uriInput, setUriInput] = useState("");
   const [mint, setMint] = useState<{ body: React.ReactNode }>();
-  const [contractDetails, setContractDetails] = useState<{
-    name: string;
-    balance: number;
-  }>();
 
   const [ownerInput, setOwnerInput] = useState("");
   const [ownersTokens, setOwnersTokens] = useState<
@@ -28,6 +25,10 @@ const NFTPage = () => {
       uri: string;
     }[]
   >([]);
+  const [transferFrom, setTransferFrom] = useState("");
+  const [transferTo, setTransferTo] = useState("");
+  const [transferTokenId, setTransferTokenId] = useState("");
+  const [transferRes, setTransferRes] = useState<{ body: React.ReactNode }>();
 
   const fetchContract = () => {
     //	Smart	contract	ABI
@@ -52,72 +53,38 @@ const NFTPage = () => {
     setContract(coyoteNft);
   };
 
-  const getContractDetails = async (
-    nftContract: ethers.Contract,
-    owner: string
-  ) => {
-    const name = await nftContract.name();
-    const balance = await nftContract.balanceOf(owner);
-
-    setContractDetails({ name, balance: Number(balance) });
-    dispatch({
-      type: "SHOW_NOTIFICATION",
-      notification: {
-        id: getRandomId(),
-        title: "Contract Details",
-        type: "CHAIN",
-        body: (
-          <div>
-            <p>
-              <b>Name: </b>
-              {name}
-            </p>
-            <p>
-              <b>Balance: </b>
-              {Number(balance)}
-            </p>
-          </div>
-        ),
-        time: new Date(),
-      },
-    });
-  };
-
   const handleMintToken = async (
     nftContract: ethers.Contract,
-    owner: string
+    owner: string,
+    uri: string
   ) => {
-    const mint = await nftContract.mintToken(owner, "abc.com");
-    const initBody = (
-      <div>
-        <p>
-          <b>Hash: </b>
-          {mint.hash}
-        </p>
-        <p>
-          <b>Status: </b>Pending
-        </p>
-      </div>
-    );
-    setMint({ body: initBody });
-    dispatch({
-      type: "SHOW_NOTIFICATION",
-      notification: {
-        id: getRandomId(),
-        title: "Mint NFT",
-        type: "CHAIN",
-        body: initBody,
-        time: new Date(),
-      },
-    });
+    const mint = await nftContract.mintToken(owner, uri);
+    // const initBody = (
+    //   <div>
+    //     <p>
+    //       <b>Hash: </b>
+    //       {mint.hash}
+    //     </p>
+    //     <p>
+    //       <b>Status: </b>Pending
+    //     </p>
+    //   </div>
+    // );
+    // setMint({ body: initBody });
+    // dispatch({
+    //   type: "SHOW_NOTIFICATION",
+    //   notification: {
+    //     id: getRandomId(),
+    //     title: "Mint NFT",
+    //     type: "CHAIN",
+    //     body: initBody,
+    //     time: new Date(),
+    //   },
+    // });
     const res = await mint.wait();
     if (res.status === 1) {
       const successBody = (
         <div>
-          <p>
-            <b>Hash: </b>
-            {mint.transactionHash}
-          </p>
           <p>
             <b>From: </b>
             {mint.from}
@@ -125,9 +92,6 @@ const NFTPage = () => {
           <p>
             <b>To: </b>
             {mint.to}
-          </p>
-          <p>
-            <b>Status: </b>Success
           </p>
         </div>
       );
@@ -159,14 +123,16 @@ const NFTPage = () => {
     const sentTokenIds = sentEvents.map((event) => event.args?.tokenId);
 
     sentTokenIds.forEach((tokenId: ethers.BigNumber) => {
-      const index = recievedTokenIds.indexOf(
-        (recievedTokenId: ethers.BigNumber) => recievedTokenId.eq(tokenId)
+      const index = recievedTokenIds.findIndex(
+        (recievedTokenId: ethers.BigNumber) => {
+          console.log(tokenId, recievedTokenId, recievedTokenId.eq(tokenId));
+          return recievedTokenId.eq(tokenId);
+        }
       );
       if (index >= 0) {
         recievedTokenIds.splice(index, 1);
       }
     });
-    console.log(recievedTokenIds);
 
     const name = await nftContract.name();
     const usersTokensMetadetail = await Promise.all<{
@@ -184,7 +150,68 @@ const NFTPage = () => {
       })
     );
     console.log(usersTokensMetadetail);
+    dispatch({
+      type: "SHOW_NOTIFICATION",
+      notification: {
+        id: getRandomId(),
+        title: "Fetch users tokens",
+        type: "CHAIN",
+        body: (
+          <div>
+            <p>
+              <b>Owner: </b>
+              {owner}
+            </p>
+            <p>
+              <b>Token Ids: </b>
+              {`[${usersTokensMetadetail.map((item) => `${item.id}, `)}]`}
+            </p>
+          </div>
+        ),
+        time: new Date(),
+      },
+    });
     setOwnersTokens(usersTokensMetadetail);
+  };
+
+  const handleSafeTransfer = async (
+    from: string,
+    to: string,
+    tokenId: string,
+    nftContract: ethers.Contract
+  ) => {
+    const transfer = await nftContract.transferFrom(from, to, tokenId);
+    const res = await transfer.wait();
+
+    if (res.status === 1) {
+      const successBody = (
+        <div>
+          <p>
+            <b>Token ID: </b>
+            {tokenId}
+          </p>
+          <p>
+            <b>From: </b>
+            {from}
+          </p>
+          <p>
+            <b>To: </b>
+            {to}
+          </p>
+        </div>
+      );
+      dispatch({
+        type: "SHOW_NOTIFICATION",
+        notification: {
+          id: getRandomId(),
+          title: "Transfer NFT",
+          type: "CHAIN",
+          body: successBody,
+          time: new Date(),
+        },
+      });
+      setTransferRes({ body: successBody });
+    }
   };
 
   useEffect(() => {
@@ -221,36 +248,17 @@ const NFTPage = () => {
         >
           <h2>Coyote Token</h2>
           <div style={{ marginBottom: "1.2rem" }}>
-            <Button
-              disabled={!contract || !ownerPub}
-              onClick={() =>
-                contract && ownerPub && getContractDetails(contract, ownerPub)
+            <Input
+              value={uriInput}
+              onChange={(e) => setUriInput(e.target.value)}
+              label="Mint Token"
+              placeholder="Uri or cid path..."
+              onSubmit={() =>
+                contract &&
+                ownerPub &&
+                handleMintToken(contract, ownerPub, uriInput)
               }
-            >
-              Get Details
-            </Button>
-            {contractDetails && (
-              <ConsoleAlert type="CHAIN">
-                <p>
-                  <b>Name: </b>
-                  {contractDetails.name}
-                </p>
-                <p>
-                  <b>Balance: </b>
-                  {contractDetails.balance}
-                </p>
-              </ConsoleAlert>
-            )}
-          </div>
-          <div style={{ marginBottom: "1.2rem" }}>
-            <Button
-              disabled={!contract || !ownerPub}
-              onClick={() =>
-                contract && ownerPub && handleMintToken(contract, ownerPub)
-              }
-            >
-              Mint Token
-            </Button>
+            />
             {mint && <ConsoleAlert type="CHAIN">{mint.body}</ConsoleAlert>}
           </div>
           <div style={{ marginBottom: "1.2rem" }}>
@@ -293,6 +301,53 @@ const NFTPage = () => {
                   </div>
                 );
               })}
+            </div>
+            <div
+              style={{
+                marginTop: "1.2rem",
+              }}
+            >
+              <h4>Transfer tokens</h4>
+              <div
+                style={{
+                  display: "grid",
+                  gridTemplateColumns: "repeat(3, 1fr)",
+                  gap: "0.8rem",
+                }}
+              >
+                <Input
+                  label="From"
+                  value={transferFrom}
+                  onChange={(e) => setTransferFrom(e.target.value)}
+                />
+                <Input
+                  label="To"
+                  value={transferTo}
+                  onChange={(e) => setTransferTo(e.target.value)}
+                />
+                <Input
+                  label="Token Id"
+                  value={transferTokenId}
+                  onChange={(e) => setTransferTokenId(e.target.value)}
+                />
+                <Button
+                  disabled={!transferFrom || !transferTo || !transferTokenId}
+                  onClick={() =>
+                    contract &&
+                    handleSafeTransfer(
+                      transferFrom,
+                      transferTo,
+                      transferTokenId,
+                      contract
+                    )
+                  }
+                >
+                  Transfer
+                </Button>
+              </div>
+              {transferRes && (
+                <ConsoleAlert type="CHAIN">{transferRes.body}</ConsoleAlert>
+              )}
             </div>
           </div>
         </div>
