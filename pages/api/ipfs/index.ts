@@ -7,16 +7,18 @@ interface ResData {
 }
 
 export const getIPFSNode = async () => {
+  console.log(global.ipfs);
   if (!global.ipfs) {
     console.log("Setting up node...");
     global.ipfs = await create();
   }
   return global.ipfs;
+  return await create();
 };
 
 const handler = async (req: NextApiRequest, res: NextApiResponse<ResData>) => {
   if (req.method === "POST") {
-    const node = await getIPFSNode();
+    const node = await create();
 
     const message = req.body.message;
 

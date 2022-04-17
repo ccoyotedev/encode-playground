@@ -21,3 +21,11 @@
     text-align: right;
   }
 }
+
+.details {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-bottom: 0.4rem;
+  opacity: 0.6;
+}

@@ -27,6 +27,7 @@ export const IPFSPost = () => {
           id: getRandomId(),
           title: "IPFS Post",
           clipboard: json.cidPath,
+          type: "DB",
           body: (
             <div>
               <p>
@@ -43,7 +44,7 @@ export const IPFSPost = () => {
         },
       });
     } else {
-      console.error("Error: ", res.body);
+      console.error("Error: ", res);
     }
     setFetching(false);
   };
@@ -60,7 +61,7 @@ export const IPFSPost = () => {
         fetching={fetching}
       />
       {cidPath && (
-        <ConsoleAlert>
+        <ConsoleAlert type="DB">
           <h4>Cid Path</h4>
           <p>{cidPath}</p>
         </ConsoleAlert>

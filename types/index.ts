@@ -10,6 +10,7 @@ export interface Notification {
   body: string | React.ReactNode;
   clipboard?: string;
   time: Date;
+  type?: "DB" | "CHAIN";
 }
 
 export interface GlobalNotification extends Notification {

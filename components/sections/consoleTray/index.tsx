@@ -1,8 +1,9 @@
 import { Sidetray } from "components/ui/molecules";
-import { ServerIcon } from "assets/icons";
+import { ChainIcon, ServerIcon } from "assets/icons";
 import { useNotification } from "contexts/NotificationContext";
 import styles from "./styles.module.scss";
-import { useEffect, useRef } from "react";
+import { useRef } from "react";
+import Image from "next/image";
 
 export const ConsoleTray = () => {
   const [{ notifications }] = useNotification();
@@ -40,7 +41,16 @@ export const ConsoleTray = () => {
                   item.clipboard && copyToClipboard(item.clipboard)
                 }
               >
-                <p className={styles.time}>{formatTime(item.time)}</p>
+                <div className={styles.details}>
+                  <p className={styles.time}>{formatTime(item.time)}</p>
+                  {item.type && (
+                    <Image
+                      height={18}
+                      src={item.type === "DB" ? ServerIcon : ChainIcon}
+                      alt="Console icon"
+                    />
+                  )}
+                </div>
                 <h4>{item.title}</h4>
                 {item.body}
               </div>

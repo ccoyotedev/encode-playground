@@ -22,6 +22,7 @@ export const IPFSGet = () => {
         notification: {
           id: getRandomId(),
           title: "IPFS Get",
+          type: "DB",
           body: (
             <div>
               <p>
@@ -53,7 +54,7 @@ export const IPFSGet = () => {
         fetching={fetching}
       />
       {returnedData && (
-        <ConsoleAlert>
+        <ConsoleAlert type="DB">
           <h4>Returned data</h4>
           <p>{returnedData}</p>
         </ConsoleAlert>
